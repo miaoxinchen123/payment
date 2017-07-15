@@ -20,6 +20,7 @@
 	<http pattern="/payment/register/**" security="none"></http>
 	<http pattern="/payment/forgetPwd/**" security="none"></http>
 	<http pattern="/payment/orderService/saveOrder/**" security="none"></http>
+	<http pattern="/payment/orderService/validateOrder/**" security="none"></http>
 	<http auto-config="false" entry-point-ref="loginAuthenticationEntryPoint">
 		<!-- url访问失败 -->
 	    <access-denied-handler ref="accessDeniedHandler"/>

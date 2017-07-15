@@ -76,6 +76,7 @@ public class OrderController {
 		return orderDto;
 	}
 
+	
 	@RequestMapping(value="/validateOrder",method = RequestMethod.POST)
 	public @ResponseBody OrderValidateDto validateOrder(String user_id,String bussiness_id) {
 		OrderValidateDto validateDto = new OrderValidateDto();
@@ -92,9 +93,9 @@ public class OrderController {
 			validateDto.setUserExist(true);
 		}
 		if(null == orderService.getUserOrderByBussinessId(bussiness_id)){
-			validateDto.setOrderExist(true);
-		}else{
 			validateDto.setOrderExist(false);
+		}else{
+			validateDto.setOrderExist(true);
 		}
 		
 		return validateDto;

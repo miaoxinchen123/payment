@@ -2,34 +2,35 @@ package com.tengfei.payment.dto;
 
 public class OrderValidateDto {
 	
-	public boolean isUserExist;
+	public boolean userExist;
 	
-	public boolean isOrderExist;
+	public boolean orderExist;
 	
-	public boolean isParamRight;
+	public boolean paramRight;
 
 	public boolean isUserExist() {
-		return isUserExist;
+		return userExist;
 	}
 
-	public void setUserExist(boolean isUserExist) {
-		this.isUserExist = isUserExist;
+	public void setUserExist(boolean userExist) {
+		this.userExist = userExist;
 	}
 
 	public boolean isOrderExist() {
-		return isOrderExist;
+		return orderExist;
 	}
 
-	public void setOrderExist(boolean isOrderExist) {
-		this.isOrderExist = isOrderExist;
+	public void setOrderExist(boolean orderExist) {
+		this.orderExist = orderExist;
 	}
 
 	public boolean isParamRight() {
-		return isParamRight;
+		return paramRight;
 	}
 
-	public void setParamRight(boolean isParamRight) {
-		this.isParamRight = isParamRight;
+	public void setParamRight(boolean paramRight) {
+		this.paramRight = paramRight;
 	}
+
 	
 }
