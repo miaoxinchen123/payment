@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tengfei.payment.dto.OrderDto;
+import com.tengfei.payment.dto.OrderValidateDto;
 import com.tengfei.payment.dto.Result;
 import com.tengfei.payment.dto.Status;
 import com.tengfei.payment.service.OrderService;
@@ -32,8 +33,9 @@ import com.tengfei.payment.vo.UserRate;
 
 /**
  * 订单管理
+ * 
  * @author miaoxin.chen
- * @date   2016年8月30日
+ * @date 2016年8月30日
  */
 @Controller
 @RequestMapping("/orderService")
@@ -41,19 +43,18 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Autowired
 	private UserRateService userRateService;
-	
+
 	@Autowired
 	private UserService userService;
-	
-	
+
 	@ResponseBody
 	@RequestMapping("/page")
 	public ModelAndView page(Page page) {
 		User user = UserUtil.getCurrentUser();
-		if(page.getMapBean() == null){
+		if (page.getMapBean() == null) {
 			HashMap<String, Object> mapBean = new HashMap<>();
 			mapBean.put("userId", user.getId());
 			mapBean.put("userType", user.getType());
@@ -67,34 +68,58 @@ public class OrderController {
 		mav.addObject("tradeType", TradeType.kv());
 		return mav;
 	}
-	
+
 	@RequestMapping("/userOrderInfo")
 	public @ResponseBody OrderDto userOrderInfo() {
 		User user = UserUtil.getCurrentUser();
 		OrderDto orderDto = orderService.getUserOrderInfo(user.getId());
 		return orderDto;
 	}
-	
-	
-	@RequestMapping(value="/saveOrder",method = RequestMethod.POST)
-	public @ResponseBody String saveOrUpdateOrder(String user_id,String bussiness_id,String bussiness_money,
-			String bussiness_channel,String status,String date) {
-		if(Utility.isEmpty(user_id)||Utility.isEmpty(bussiness_id)||Utility.isEmpty(bussiness_channel)||Utility.isEmpty(status)|| Utility.isEmpty(bussiness_money)||Utility.isEmpty(date)){
+
+	@RequestMapping(value="/validateOrder",method = RequestMethod.POST)
+	public @ResponseBody OrderValidateDto validateOrder(String user_id,String bussiness_id) {
+		OrderValidateDto validateDto = new OrderValidateDto();
+		if(Utility.isEmpty(user_id)||Utility.isEmpty(bussiness_id)){
+			validateDto.setParamRight(false);
+			return validateDto;
+		}
+		validateDto.setParamRight(true);
+		User user = userService.getByUserId(user_id);
+		if(user ==null){
+			validateDto.setUserExist(false);
+			return validateDto;
+		}else{
+			validateDto.setUserExist(true);
+		}
+		if(null == orderService.getUserOrderByBussinessId(bussiness_id)){
+			validateDto.setOrderExist(true);
+		}else{
+			validateDto.setOrderExist(false);
+		}
+		
+		return validateDto;
+	}
+
+	@RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+	public @ResponseBody String saveOrUpdateOrder(String user_id, String bussiness_id, String bussiness_money,
+			String bussiness_channel, String status, String date) {
+		if (Utility.isEmpty(user_id) || Utility.isEmpty(bussiness_id) || Utility.isEmpty(bussiness_channel)
+				|| Utility.isEmpty(status) || Utility.isEmpty(bussiness_money) || Utility.isEmpty(date)) {
 			return "param error";
 		}
 		User user = userService.getByUserId(user_id);
-		if(user ==null){
+		if (user == null) {
 			return "no user";
 		}
 		Order order = orderService.getUserOrderByBussinessId(bussiness_id);
-		if(order ==null){
+		if (order == null) {
 			order = new Order();
 			order.setId(Tools.generatorId());
 			order.setUserId(user_id);
 			order.setBusinessId(bussiness_id);
 			try {
 				order.setBusinessMoney(Float.valueOf(bussiness_money));
-			}catch (Exception e) {
+			} catch (Exception e) {
 				return "money format error";
 			}
 			try {
@@ -103,44 +128,46 @@ public class OrderController {
 				return "date format error";
 			}
 			order.setStatus(status);
-			//获取用户利率，计算平台抽成 TODO 很小的时候怎么处理
-			UserRate userRate=userRateService.getUserRateById(user_id);
+			// 获取用户利率，计算平台抽成 TODO 很小的时候怎么处理
+			UserRate userRate = userRateService.getUserRateById(user_id);
 			float platformChargeFloat = 0;
-			float platformCharge = 0 ;
-			if(userRate ==null){
-				//默认千分之5
+			float platformCharge = 0;
+			if (userRate == null) {
+				// 默认千分之5
 				platformChargeFloat = 5l;
-			}else{
-				if(bussiness_channel.equals(TradeType.ALIPAYPC.code())){
+			} else {
+				if (bussiness_channel.equals(TradeType.ALIPAYPC.code())) {
 					platformChargeFloat = userRate.getAlipayPc();
-				}else if(bussiness_channel.equals(TradeType.ALIPAYWAP.code())){
+				} else if (bussiness_channel.equals(TradeType.ALIPAYWAP.code())) {
 					platformChargeFloat = userRate.getAlipayWap();
-				}else if(bussiness_channel.equals(TradeType.CARDWAP.code())){
+				} else if (bussiness_channel.equals(TradeType.CARDWAP.code())) {
 					platformChargeFloat = userRate.getCardWap();
-				}else if(bussiness_channel.equals(TradeType.CARDPC.code())){
+				} else if (bussiness_channel.equals(TradeType.CARDPC.code())) {
 					platformChargeFloat = userRate.getCardPc();
-				}else if(bussiness_channel.equals(TradeType.WECHATPC.code())){
+				} else if (bussiness_channel.equals(TradeType.WECHATPC.code())) {
 					platformChargeFloat = userRate.getWechatPc();
-				}else if(bussiness_channel.equals(TradeType.WECHATWAP.code())){
+				} else if (bussiness_channel.equals(TradeType.WECHATWAP.code())) {
 					platformChargeFloat = userRate.getWechatWap();
-				}else{
+				} else {
 					return "channel error";
 				}
 			}
 			order.setBusinessChannel(bussiness_channel);
-			platformCharge = new BigDecimal(platformChargeFloat).multiply(new BigDecimal(bussiness_money)).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue();
+			platformCharge = new BigDecimal(platformChargeFloat).multiply(new BigDecimal(bussiness_money))
+					.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 			order.setPlatformCharge(platformCharge);
 			order.setCreateDate(new Date());
-			if(status.equals(OrderStatus.SUCCESS.code())){
-				//修改账户余额
-				user.setBalance(user.getBalance().add(new BigDecimal(order.getBusinessMoney()-order.getPlatformCharge())));
+			if (status.equals(OrderStatus.SUCCESS.code())) {
+				// 修改账户余额
+				user.setBalance(
+						user.getBalance().add(new BigDecimal(order.getBusinessMoney() - order.getPlatformCharge())));
 				userService.saveUser(user);
 			}
 			orderService.saveOrUpdateOrder(order);
-		}else{
+		} else {
 			return "order existed";
 		}
 		return "success";
 	}
-	
+
 }
