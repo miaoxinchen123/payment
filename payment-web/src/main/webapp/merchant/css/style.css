@@ -5,7 +5,7 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .icon-arrow-down { background-position: 0 0; }
 .icon-notice { background-position: -26px 0; }
 
-/*框架*/
+/*妗嗘灦*/
 .view-topbar {position: relative; position: fixed;  width: 100%; min-width: 640px; height: 50px; background: #2a94de; z-index: 101; }
 .view-body { position: absolute; width: 100%; min-width: 1200px; top: 50px; bottom: 0px; background-color: #000; }
 .view-body .view-sidebar { position: fixed; top: 50px; bottom: 0px; background-color: #293038; z-index: 102; }
@@ -17,9 +17,9 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .dropdown { position: relative; }
 .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; float: left; min-width: 160px; font-size: 12px; list-style: none; background-color: #fff; border: 1px solid #eee; -webkit-box-shadow: 0 1px 3px #e5e5e5; -moz-box-shadow: 0 1px 3px #e5e5e5; box-shadow: 0 1px 3px #e5e5e5; z-index: 1000; }
 
-/*框架头部内容*/
+/*妗嗘灦澶撮儴鍐呭*/
 .tobar-head { width: 180px; }
-.tobar-head .topbar-logo { display: block; width: 50px; height: 50px; background: #2a94de; }
+.tobar-head .topbar-logo { display: block; width: 42px; height: 42px; background: #2a94de; }
 .topbar-console .topbar-home-link { width: 130px; border-right: 1px solid #008fbf; }
 .topbar-info { right: 0; top: 0; background: #008fbf; }
 .topbar-info .topbar-notice { position: relative; margin-left: 1px; padding: 0 20px; }
@@ -39,7 +39,7 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .topbar-info .dropdown.open .dropdown-menu { display: block; }
 .topbar-info .dropdown.open .icon-arrow-down { background-position: 0 -26px; }
 
-/*框架左侧导航*/
+/*妗嗘灦宸︿晶瀵艰埅*/
 .sidebar-content { width: 180px; overflow: hidden; }
 .sidebar-nav a { display: block; width: 100%; height: 40px; line-height: 40px; color: #fff; }
 .sidebar-nav .sidebar-title a { background-color: #22282e; }
@@ -63,7 +63,7 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .close-left {background-position: -24px top;}
 
 
-/*表格*/
+/*琛ㄦ牸*/
 .table { width: 100%; border: 1px solid #e7e7e7; border-collapse:collapse; border-spacing:0; table-layout: fixed; }
 .table tr th, .table tr td { padding: 12px 8px; border-bottom: 1px solid #e1e6eb; }
 .table tr th { font-weight: normal; text-align: left; color: #888; background: #f4f5f9; }
@@ -94,7 +94,7 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .margin-right-none{margin-right: 0!important;}
 
 
-/*上传照片*/
+/*涓婁紶鐓х墖*/
 .upload-photo{width:252px;float:left;}
 .upload-native{width:250px;height:170px;border:1px solid #c6c6c6;background:#fff;}
 .upload-photo-show{width:135px;float:left;padding-top:9px;}
@@ -118,14 +118,14 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .text-green-main {color: #25A725 !important;}
 .text-yellow-main {color: #FFA115 !important;}
 
-/*金币管理*/
+/*閲戝竵绠＄悊*/
 .own{margin-left:45px;font-size:12px;color:#505050}
 .coin_attent{border-bottom:1px dashed #dedede;color:#0098ce;font-size:14px;padding:20px 0;padding-left: 10px;}
 
 
 .table-margin{margin:20px 20px 0 20px;}
 
-/*消费明细*/
+/*娑堣垂鏄庣粏*/
 .border-dd{border-bottom: 1px dashed #d9d9d9;margin-top:15px;}
 .custom-lists,.cost-lists{margin-top:20px;}
 .cost-lists li a{display: block;padding: 0 15px;color:#404040;cursor: pointer;}
@@ -169,12 +169,12 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .list-checked{background: url(../images/icon_charge.png) no-repeat right bottom;}
 .lists .list-checked{border-color: #f6aba5;}
 
-/*弹窗*/
+/*寮圭獥*/
 
 .pop-up-con .content-left-zoon{width:30%;color:#6b6b6b;}
 .pop-up-con .content-right-zoon{width:66%;}
 
-/*表格样式*/
+/*琛ㄦ牸鏍峰紡*/
 .offcial-table{border:1px solid #e8e8e9;font-size:12px;position:relative;line-height: 40px;text-align:center;  
   vertical-align:middle;  }
 .offcial-table .tr-th{width:100%;border-bottom:1px solid #e8e8e9;}
@@ -187,8 +187,8 @@ body{font-family: 'Lantinghei SC','microsoft yahei', Tahoma, Helvetica, SimSun, 
 .offcial-table .td{color:#818181;white-space:nowrap;float:left;min-height: 40px;}
 .offcial-table .td1{color:#818181;white-space:nowrap;float:left;min-height: 60px;border-width: 0px 1px 1px 0px;border-color:#E5E5E5;border-style:solid;}
 .offcial-table .td.text-roseo{color:#f30000;}
-.offcial-table .p1{margin:0 auto;width:155px;height:55px; line-height:55px;font-size:14px;  font-family:"微软雅黑";font-weight:bold;text-align:right}
-.offcial-table .p2{margin:0 auto;margin-left:10px;height:55px; line-height:55px;font-size:14px;  font-family:"微软雅黑";font-weight:bold;text-align:left}
+.offcial-table .p1{margin:0 auto;width:155px;height:55px; line-height:55px;font-size:14px;  font-family:"寰蒋闆呴粦";font-weight:bold;text-align:right}
+.offcial-table .p2{margin:0 auto;margin-left:10px;height:55px; line-height:55px;font-size:14px;  font-family:"寰蒋闆呴粦";font-weight:bold;text-align:left}
 .offcial-td-style{ color:#818181; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;float:left;}
 .offcial-table .offical-td{width:100%;height:40px;overflow:hidden;}
 .white-space{white-space:nowrap;}
@@ -217,7 +217,7 @@ label{cursor: pointer;}
 
 
 
-/*页码*/
+/*椤电爜*/
 .show-page{width:100%;}
 .offcial-page{font-size:10px;float:right;}
 .offcial-page li{float:left;color:#8f8f8f;font-size:12px;line-height:30px;margin-right:10px;}
@@ -242,7 +242,7 @@ label{cursor: pointer;}
 
 
 
-/*按钮*/
+/*鎸夐挳*/
 .step-botton{border-radius: 3px;line-height: 32px;display: block;}
 .botton-title{line-height:32px;color:#40b2da;}
 .botton-title:hover,.button-word,.button-word:hover,.button-word1{color:#40b2da;}
@@ -267,7 +267,7 @@ label{cursor: pointer;}
 .submit{display: block;cursor:pointer;border-radius: 3px; background: #40B2DA;padding: 0 30px;line-height: 32px;color:#fff;}
 .submit:hover{color:#fff;background: #66c1e1;}
 
-/*下拉框*/
+/*涓嬫媺妗�*/
 .select-table{position: relative;}
 .select-table input{border-radius: 3px; width:100%;cursor: pointer;height:100%;padding-left: 10px;border:1px solid #c6c6c6;}
 .select-table input:focus{border-color:#40b2da;}
@@ -295,7 +295,7 @@ label{cursor: pointer;}
 .status-left ul li{padding-left: 20px;}
 .table-time{width:110px;height: 20px;line-height: 20px;margin-top: 10px;}
 
-/*日历*/
+/*鏃ュ巻*/
 .laydate-box{width:186px;height:35px;}
 .laydate-box .hd-input{width:100%;height:35px;font-size: 12px;}
 
@@ -375,7 +375,7 @@ a.submit-order:hover{background:#40b2da;color:#fff}
 .info-center-title .manage-title a{display:block;color:#098cba;height:24px;line-height:24px;font-weight:600;}
 
 
-/*==========以下部分是Validform必须的===========*/
+/*==========浠ヤ笅閮ㄥ垎鏄疺alidform蹇呴』鐨�===========*/
 .Validform_checktip{
 	margin-left:8px;
 	line-height:20px;
@@ -423,7 +423,7 @@ a.submit-order:hover{background:#40b2da;color:#fff}
 .bg-yellow-light{background: #fdfce9;}
 .bg-blue-pale{background: #e9f9fd;}
 
-/*城市地区选择样式*/
+/*鍩庡競鍦板尯閫夋嫨鏍峰紡*/
 .hd-select-city {  }
 .select-country, .select-city { float: left; position: relative; padding: 4px 8px; border: 1px solid #ccc; cursor: pointer; background: #fff; }
 .select-country { width: 95px; }
