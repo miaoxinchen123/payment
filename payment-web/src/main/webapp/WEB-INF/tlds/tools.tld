@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>JSTL 1.1 functions library</description>
+  <display-name>JSTL functions</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>tools</short-name>
+  <uri>http://java.sun.com/jsp/jstl/functions</uri>
+
+  <function>
+    <name>toUserTypeName</name>
+    <function-class>com.tengfei.payment.system.UserType</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>toUserStatuName</name>
+    <function-class>com.tengfei.payment.system.UserStatu</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+  
+ <function>
+    <name>toBalanceTypeName</name>
+    <function-class>com.tengfei.payment.system.BalanceType</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>formatMoney</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String formatMoney(java.math.BigDecimal)</function-signature>
+  </function>
+  
+  <function>
+    <name>defaultPwd</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String defaultPwd()</function-signature>
+  </function>
+  
+ <function>
+    <name>isProxy</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>boolean isProxy(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>isMerchant</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>boolean isMerchant(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>formatRate</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String formatRate(java.lang.Float)</function-signature>
+  </function>
+  
+   <function>
+    <name>formatThousandRate</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String formatThousandRate(java.lang.Float)</function-signature>
+  </function>
+  
+  <function>
+    <name>formatName</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String formatName(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>formatCardNo</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.String formatCardNo(java.lang.String)</function-signature>
+  </function>
+  
+  <function>
+    <name>defaultRate</name>
+    <function-class>com.tengfei.payment.util.Tools</function-class>
+    <function-signature>java.lang.Float defaultRate()</function-signature>
+  </function>
+  
+  <function>
+    <name>toTradeTypeName</name>
+    <function-class>com.tengfei.payment.system.TradeType</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+  
+   <function>
+    <name>toOrderStatusName</name>
+    <function-class>com.tengfei.payment.system.OrderStatus</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+  
+   <function>
+    <name>toWithDrawStatusName</name>
+    <function-class>com.tengfei.payment.system.WithDrawStatus</function-class>
+    <function-signature>java.lang.String toName(java.lang.String)</function-signature>
+  </function>
+
+</taglib>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.UserRateDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="userRateMap" type="com.tengfei.payment.vo.UserRate">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="alipayPc" column="alipay_pc"/>
+        <result property="alipayWap" column="alipay_wap"/>
+        <result property="cardPc" column="card_pc"/>
+        <result property="cardWap" column="card_wap"/>
+        <result property="wechatPc" column="wechat_pc"/>
+        <result property="wechatWap" column="wechat_wap"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+       
+	<insert id="addUserRate">
+		insert into user_rate (id,user_id,alipay_pc,alipay_wap,card_pc,card_wap,wechat_pc,wechat_wap,create_date,update_date)
+			values(#{id},#{userId},#{alipayPc},#{alipayWap},#{cardPc},#{cardWap},#{wechatPc},#{wechatWap},#{createDate},#{updateDate})
+	</insert>
+	
+	<update id="updateUserRate">
+	   	update user_rate
+       	<include refid="update_conditions"/>
+       	where id = #{id}
+	</update>
+	
+    
+    <delete id="delUserRateByUserId">
+    	delete from user_rate where user_id = #{userId}
+    </delete>
+    
+      
+    <sql id="update_conditions">
+    	<trim prefix="set" suffixOverrides=",">
+	       	<if test="null != alipayPc">alipay_pc=#{alipayPc},</if>
+	       	<if test="null != alipayWap">alipay_wap=#{alipayWap},</if>
+	       	<if test="null != cardPc">card_pc=#{cardPc},</if>
+	       	<if test="null != cardWap">card_wap=#{cardWap},</if>
+	       	<if test="null != wechatPc">wechat_pc=#{wechatPc},</if>
+	       	<if test="null != wechatWap">wechat_wap=#{wechatWap},</if>
+       </trim>
+    </sql>
+    
+    <select id="getUserRateById" resultMap="userRateMap">
+       select * from user_rate where user_id = #{userId}
+    </select>
+        
+</mapper>

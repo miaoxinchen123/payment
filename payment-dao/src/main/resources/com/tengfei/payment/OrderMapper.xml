@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.OrderDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="orderMap" type="com.tengfei.payment.vo.Order">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="businessId" column="business_id"/>
+        <result property="businessTime" column="business_time"/>
+        <result property="businessMoney" column="business_money"/>
+        <result property="businessChannel" column="business_channel"/>
+        <result property="platformCharge" column="platform_charge"/>
+        <result property="status" column="status"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+	<insert id="addOrder">
+		insert into user_order (id,user_id,business_id,business_time,business_money,business_channel,platform_charge,status,create_date,update_date)
+			values(#{id},#{userId},#{businessId},#{businessTime},#{businessMoney},#{businessChannel},#{platformCharge},#{status},#{createDate},#{updateDate})
+	</insert>
+	
+	<update id="updateOrder">
+		update user_order
+		<set>
+			id=#{id}
+			<if test="status != null">,status=#{status}</if>
+			<if test="updateDate != null">,update_date=#{updateDate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+    <select id="pageQueryOrder" resultMap="orderMap">
+   	  select * from user_order
+      <where>
+      	<if test="null != mapBean">
+      		 <choose>  
+	            <when test="null != mapBean.merchantIds">  
+              		and user_id in (${mapBean.merchantIds})
+	            </when>  
+	            <otherwise>  
+	              	and user_id =#{mapBean.userId}
+	            </otherwise>  
+        	</choose>  
+	    	<if test="null != mapBean.orderStatus and '' != mapBean.orderStatus">
+	    		and status = #{mapBean.orderStatus}
+	    	</if>
+	    	<if test="null != mapBean.businessId and '' != mapBean.businessId">
+	    		and business_id = #{mapBean.businessId}
+	    	</if>
+    	 	<if test="null != mapBean.tradeType and '' != mapBean.tradeType">
+	    		and business_type = #{mapBean.tradeType}
+	    	</if>
+	    	<if test="null != mapBean.startDate and '' != mapBean.startDate">
+	    		and business_time >= #{mapBean.startDate}
+	    	</if>
+	    	<if test="null != mapBean.endDate and '' != mapBean.endDate">
+	    		and #{mapBean.endDate} >=  business_time 
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+    <select id="userOrderByDate" resultType="HashMap"  parameterType="HashMap">
+    	select count(*) as count,IFNULL(sum(business_money),0) as money from user_order where user_id =#{userId} 
+    	<if test="status != null">
+    		and status =#{status}
+    	</if>
+    	<if test="startDate != null">
+    		 and create_date >= #{startDate} 
+    	</if>
+    	<if test="endDate != null">
+    		 and #{endDate} >= create_date
+		</if>    	
+    
+    </select>
+     
+    <select id="proxyOrderCountByDate" resultType="HashMap">
+    	select IFNULL(sum(business_money),0) as money  from user_order where  user_id =#{userId} 
+    		<if test="startDate != null">
+    		 and create_date >= #{startDate} 
+    	</if>
+    	<if test="endDate != null">
+    		 and #{endDate} >= create_date
+		</if>    
+    </select>
+    
+     <select id="getUserOrderByBussinessId" resultMap="orderMap" >
+    	select * from user_order where business_id =#{businessId}
+    </select>
+    
+    
+</mapper>

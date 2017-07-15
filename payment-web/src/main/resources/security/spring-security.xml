@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- 配置不过滤的资源（静态资源及登录相关） -->  
+	<http pattern="/**/*.css" security="none"></http>  
+	<http pattern="/**/*.jpg" security="none"></http>  
+	<http pattern="/**/*.jpeg" security="none"></http>  
+	<http pattern="/**/*.gif" security="none"></http>  
+	<http pattern="/**/*.png" security="none"></http>  
+	<http pattern="/**/*.js" security="none"></http>
+	<http pattern="/accessDenied.jsp" security="none"></http>
+	<http pattern="/register.jsp" security="none"></http>
+	<http pattern="/forgetPwd.jsp" security="none"></http>
+	<http pattern="/login.jsp" security="none"></http>
+	<http pattern="/payment/register/**" security="none"></http>
+	<http pattern="/payment/forgetPwd/**" security="none"></http>
+	<http pattern="/payment/orderService/saveOrder/**" security="none"></http>
+	<http auto-config="false" entry-point-ref="loginAuthenticationEntryPoint">
+		<!-- url访问失败 -->
+	    <access-denied-handler ref="accessDeniedHandler"/>
+		<!-- 检测失效的sessionId,超时时定位到另外一个URL -->
+		<session-management invalid-session-url="/"/> 
+		<!-- 禁止匿名登录 --> 
+		<anonymous enabled="false"/>
+		<!-- 退出登录 -->
+		<logout invalidate-session="true" 
+				logout-url="/logout" 
+				delete-cookies="JSESSIONID"
+				logout-success-url="/"/> 
+		<!-- 自定义表单验证 -->
+		<custom-filter ref="loginAuthenticationFilter" position="FORM_LOGIN_FILTER"/>	
+	    <!--增加一个自定义的filter，放在FILTER_SECURITY_INTERCEPTOR之前， 实现用户、角色、权限、资源的数据库管理。-->
+	    <custom-filter ref="resourcesSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
+    </http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="authenticationProvider" />
+	</authentication-manager>
+</beans:beans>

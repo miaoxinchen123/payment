@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans default-lazy-init="true" default-autowire="byName" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation=" 
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd 
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+	
+
+	<!-- 配置dbcp数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+<!-- 		<property name="url" value="jdbc:mysql://10.1.240.44:3306/titan?useUnicode=true&amp;characterEncoding=UTF-8"/> -->
+		<property name="url" value="jdbc:mysql://122.112.255.148:3306/titan?useUnicode=true&amp;characterEncoding=UTF-8"/>
+		<property name="username" value="root" />
+		<property name="password" value="901217$#@!" />
+		<property name="initialSize" value="5" />    <!-- 初始大小 -->
+		<property name="minIdle" value="1" />        <!-- 最小空闲连接 -->
+		<property name="maxIdle" value="20" />       <!-- 最大空闲连接 -->
+		<property name="maxActive" value="100" />    <!-- 连接池中可同时连接的最大的连接数 -->
+		<property name="maxWait" value="60000" />    <!-- 最大等待时间1分钟 -->
+		<property name="removeAbandoned" value="true"/>  
+        <property name="removeAbandonedTimeout" value="180"/>  
+		<!-- 数据库连接检查 -->
+		<property name="testWhileIdle" value="true" /> <!-- 空闲检查 -->
+		<property name="numTestsPerEvictionRun" value="100" /> <!-- 每次检查链接的数量，建议设置和maxActive一样大，这样每次可以有效检查所有的链接 -->
+		<property name="timeBetweenEvictionRunsMillis" value="1800000" /> <!-- 每30分钟检查空闲连接 -->
+		<property name="validationQueryTimeout" value="1" /> <!-- 验证超时设置(1秒) -->
+		<property name="validationQuery" value="select 1 "/> <!-- 验证查询 -->
+	</bean>
+	
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+		<property name="mapperLocations">
+			<list>
+				<!-- 基础映射xml -->
+				<value>classpath*:com/tengfei/payment/**/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置SQLSession模板 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- jdbc 配置引用spring-jdbc -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+</beans>

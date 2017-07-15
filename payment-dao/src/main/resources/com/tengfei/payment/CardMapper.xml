@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.CardDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="cardMap" type="com.tengfei.payment.vo.Card">
+        <result property="id" column="id"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="picPath" column="pic_path"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+      <select id="getCardById" resultMap="cardMap">
+      select * from card
+      where id = #{id}
+    </select>
+       
+	<insert id="addCard">
+		insert into card (id,bank_name,pic_path,create_date,update_date)
+			values(#{id},#{bankName},#{picPath},#{createDate},#{updateDate})
+	</insert>
+	
+	<update id="updateCard">
+	   	update card
+       	<include refid="update_conditions"/>
+       	where id = #{id}
+	</update>
+	
+    <select id="pageQueryCard" resultMap="cardMap">
+   	  select * from card
+      <where>
+      	<if test="null != mapBean">
+	    	<if test="null != mapBean.bankName and '' != mapBean.bankName">
+	    		and bank_name =#{mapBean.bankName}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+    <select id="getAvailableCard" resultMap="cardMap">
+   	  SELECT
+			*
+		FROM
+			card c
+		WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					user_card
+				WHERE
+					bank = c.id
+				AND user_id = #{userId}
+			)
+    </select>
+    
+    <select id="getUserCard" resultMap="cardMap">
+      SELECT
+			uc.*, c.pic_path
+		FROM
+			user_card uc,card c 
+		where  uc.bank = c.id
+	    		and uc.user_id = #{userId}
+    </select>
+    
+    
+    <delete id="delCardById">
+    	delete from card where id = #{id}
+    </delete>
+    
+      
+    <sql id="update_conditions">
+    	<trim prefix="set" suffixOverrides=",">
+	       	<if test="null != bankName">bank_name=#{bankName},</if>
+	       	<if test="null != picPath">pic_path=#{picPath},</if>
+	       	<if test="null != updateDate">update_date=#{updateDate}</if>
+       </trim>
+    </sql>
+    
+    <update id="updateByUserId">
+       update user
+       <include refid="update_conditions"/>
+       where id = #{id}
+    </update>
+        
+</mapper>

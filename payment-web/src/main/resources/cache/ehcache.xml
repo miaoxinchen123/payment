@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+
+	<defaultCache 
+		eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="true" 
+		diskPersistent="true" 
+		timeToLiveSeconds="900" 
+		memoryStoreEvictionPolicy="LRU" />
+
+	<!-- 验证码缓存  -->
+	<cache name="codeCache" 
+		maxElementsInMemory="1000" 
+		eternal="false"
+		timeToLiveSeconds="900" 
+		overflowToDisk="true"
+		diskPersistent="true" 
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</cache>
+	
+</ehcache>

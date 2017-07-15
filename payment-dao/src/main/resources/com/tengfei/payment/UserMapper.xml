@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.UserDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="userMap" type="com.tengfei.payment.vo.User">
+        <result property="id" column="id"/>
+        <result property="count" column="count"/>
+        <result property="password" column="password"/>
+        <result property="phone" column="phone"/>
+        <result property="qq" column="qq"/>
+        <result property="type" column="type"/>
+        <result property="hosts" column="hosts"/>
+        <result property="balance" column="balance"/>
+        <result property="balanceType" column="balance_type"/>
+        <result property="status" column="status"/>
+        <result property="serverQQ" column="server_qq"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+    <sql id="ex_pwd_cols">
+    	id, count,  phone, qq, type, hosts, balance_type
+      , balance, status, server_qq, create_date, update_date
+    </sql>
+    
+    <select id="getByUserId" resultMap="userMap">
+      select password,<include refid="ex_pwd_cols"/> from user
+      where id = #{id}
+    </select>
+    
+    <select id="getByUserCount" resultMap="userMap">
+      select password,<include refid="ex_pwd_cols"/> from user
+      where count = #{count}
+    </select>
+    
+    <select id="getByPhone" resultMap="userMap">
+      select password,<include refid="ex_pwd_cols"/> from user
+      where phone = #{phone}
+    </select>
+    
+    <select id="pageQueryUser" resultMap="userMap">
+      select <include refid="ex_pwd_cols"/> from user
+      <where>
+      	<if test="null != mapBean">
+	    	<if test="null != mapBean.count and '' != mapBean.count">
+	    		and count like CONCAT('%', #{mapBean.count}, '%')
+	    	</if>
+	    	<if test="null != mapBean.phone and '' != mapBean.phone">
+	    		and phone like CONCAT('%', #{mapBean.phone}, '%')
+	    	</if>
+	    	<if test="null != mapBean.qq and '' != mapBean.qq">
+	    		and qq like CONCAT('%', #{mapBean.qq}, '%')
+	    	</if>
+	    	<if test="null != mapBean.type and '' != mapBean.type">
+	    		and type = #{mapBean.type}
+	    	</if>
+	    	<if test="null != mapBean.status and '' != mapBean.status">
+	    		and status = #{mapBean.status}
+	    	</if>
+	    	<if test="null != mapBean.balanceType and '' != mapBean.balanceType">
+	    		and balance_type = #{mapBean.balanceType}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+    <sql id="update_conditions">
+    	<trim prefix="set" suffixOverrides=",">
+	       	<if test="null != password">password=#{password},</if>
+	       	<if test="null != phone">phone=#{phone},</if>
+	       	<if test="null != qq">qq=#{qq},</if>
+	       	<if test="null != type">type=#{type},</if>
+	       	<if test="null != hosts">hosts=#{hosts},</if>
+	       	<if test="null != balance">balance=#{balance},</if>
+	       	balance_type=#{balanceType},
+	       	<if test="null != status">status=#{status},</if>
+	       	<if test="null != serverQQ">server_qq=#{serverQQ},</if>
+	       	<if test="null != updateDate">update_date=#{updateDate},</if>
+       </trim>
+    </sql>
+    
+    <update id="updateByUserId">
+       update user
+       <include refid="update_conditions"/>
+       where id = #{id}
+    </update>
+    
+    <update id="updateByUserCount">
+       update user
+       <include refid="update_conditions"/>
+       where count = #{count}
+    </update>
+    
+    <insert id="insertUser">
+    	insert into user(id, count, password, phone, qq, type, hosts, balance
+      		, balance_type, status, server_qq, create_date, update_date)
+		values(#{id}, #{count}, #{password}, #{phone}, #{qq}, #{type}, #{hosts}
+		, #{balance}, #{balanceType}, #{status}, #{serverQQ}, #{createDate}, #{updateDate})
+    </insert>
+    
+    <delete id="delUserById">
+    	delete from user where id = #{id}
+    </delete>
+    
+     <select id="getNormalProxy" resultMap="userMap">
+    	select * from user where type = #{type} and status = #{status}
+    </select>
+        
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.ProxyRelationDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="proxyRelationMap" type="com.tengfei.payment.vo.ProxyRelation">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rate" column="rate"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+    <sql id="base_cols">
+    	id, user_id, merchant_id, rate, create_date, update_date
+    </sql>
+    
+    
+	<insert id="addProxyRelation">
+		insert into proxy_relation (id,user_id,merchant_id,rate,create_date,update_date)
+			values(#{id},#{userId},#{merchantId},#{rate},#{createDate},#{updateDate})
+	</insert>
+	
+	<update id="updateProxyRelation">
+		update proxy_relation
+		<set>
+			id=#{id}
+			<if test="userId != null">,user_id=#{userId}</if>
+			<if test="merchantId != null">,merchant_id=#{merchantId}</if>
+			<if test="rate != null">,rate=#{rate}</if>
+			<if test="createDate != null">,create_date=#{createDate}</if>
+			<if test="updateDate != null">,update_date=#{updateDate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="selectProxyUserName">
+		select u.count from user u,proxy_relation p where u.id = p.merchantId and p.user_id=#{proxyId}
+	</select>
+	
+		
+    <select id="pageQueryProxyRelation" resultMap="proxyRelationMap">
+      select <include refid="base_cols"/> from proxy_relation
+      <where>
+      	<if test="null != mapBean">
+	    	<if test="null != mapBean.id and '' != mapBean.id">
+	    		and id=#{mapBean.id}
+	    	</if>
+	    	<if test="null != mapBean.merchantId and '' != mapBean.merchantId">
+	    		and merchant_id =#{mapBean.merchantId}
+	    	</if>
+	    	<if test="null != mapBean.userId and '' != mapBean.userId">
+	    		and user_id = #{mapBean.merchantId}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+    <select id="selectProxyRelationById" resultMap="proxyRelationMap">
+     	select <include refid="base_cols"/> from proxy_relation where user_id=#{id}
+    </select>
+    
+    <select id="selectProxyRelationByMerchantId" resultMap="proxyRelationMap">
+     	select <include refid="base_cols"/> from proxy_relation where merchant_id=#{id}
+    </select>
+    
+    <resultMap id="proxyRelationDtoMap" type="com.tengfei.payment.dto.ProxyRelationDto">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="rate" column="rate"/>
+        <result property="merchant.id" column="merchant_id"/>
+        <result property="merchant.count" column="count"/>
+        <result property="merchant.phone" column="phone"/>
+        <result property="merchant.qq" column="qq"/>
+        <result property="merchant.status" column="status"/>
+        <result property="merchant.balanceType" column="balance_type"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+    <select id="queryByProxyId" resultMap="proxyRelationDtoMap">
+		SELECT
+			pr.*, u.count,
+			u.phone,
+			u.qq,
+			u.`status`,
+			u.balance_type
+		FROM
+			proxy_relation pr
+		INNER JOIN USER u ON pr.merchant_id = u.id
+		WHERE
+			pr.user_id = #{proxyId}
+    </select>
+    
+    <delete id="delProxyRelation">
+    	delete from proxy_relation where id = #{id}
+    </delete>
+    
+    <resultMap id="userMap" type="com.tengfei.payment.vo.User">
+        <result property="id" column="id"/>
+        <result property="count" column="count"/>
+        <result property="phone" column="phone"/>
+        <result property="qq" column="qq"/>
+        <result property="balanceType" column="balance_type"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="pageAvailProxyRelation" resultMap="userMap">
+      select id,count,phone,qq,balance_type,status from user u
+      <where>
+      	not EXISTS(select 1 from proxy_relation where merchant_id = u.id)
+      	<if test="null != mapBean">
+	    	<if test="null != mapBean.count and '' != mapBean.count">
+	    		and count like CONCAT('%', #{mapBean.count}, '%')
+	    	</if>
+	    	<if test="null != mapBean.phone and '' != mapBean.phone">
+	    		and phone like CONCAT('%', #{mapBean.phone}, '%')
+	    	</if>
+	    	<if test="null != mapBean.qq and '' != mapBean.qq">
+	    		and qq like CONCAT('%', #{mapBean.qq}, '%')
+	    	</if>
+	    	<if test="null != mapBean.type and '' != mapBean.type">
+	    		and type = #{mapBean.type}
+	    	</if>
+	    	<if test="null != mapBean.status and '' != mapBean.status">
+	    		and status = #{mapBean.status}
+	    	</if>
+	    	<if test="null != mapBean.balanceType and '' != mapBean.balanceType">
+	    		and balance_type = #{mapBean.balanceType}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+</mapper>

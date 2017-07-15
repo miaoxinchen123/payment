@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/security 
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+		
+	<!-- 登录验证过滤器 -->
+	<bean id="loginAuthenticationFilter" class="com.tengfei.payment.security.LoginAuthenticationFilter">  
+	    <property name="authenticationManager" ref="authenticationManager" />  
+	    <property name="failureHandler" ref="authenticationFailureHandler" />  
+   		<property name="successHandler" ref="authenticationSuccessHandler" /> 
+   		<property name="sessionStrategy" ref="sessionFixAttackProtect" />
+	</bean> 
+	
+	<!-- 防止session固定攻击配置 -->
+	<bean id="sessionFixAttackProtect" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+	  <constructor-arg>
+	    <list>
+	      <bean class="org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy"/>
+	    </list>
+	  </constructor-arg>
+	</bean>
+
+	<!-- 验证失败处理 -->
+	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">  
+	    <property name="defaultFailureUrl" value="/" />  
+	</bean> 
+
+	<!-- 验证成功处理 -->
+	<bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">  
+	    <property name="defaultTargetUrl" value="/payment/logon" />  
+	</bean> 
+	
+	<!-- 登录验证切入点 -->
+	<bean id="loginAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<property name="loginFormUrl" value="/"/>
+	</bean>
+	
+	<!-- 自定义过滤器 -->
+	<bean id="resourcesSecurityInterceptor" class="com.tengfei.payment.security.ResourcesSecurityInterceptor">
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+	
+	<!-- 资源权限验证失败处理类 -->
+	<bean id="accessDeniedHandler" class="com.tengfei.payment.security.AccessDeniedHandlerImpl">
+		<property name="errorPage" value="/accessDenied.jsp"/>
+		<property name="loginFormUrl" value="/"/>
+	</bean>
+	
+	<!-- 登录验证处理 -->
+	<bean id="authenticationProvider" class="com.tengfei.payment.security.LoginAuthenticationProvider">
+		<property name="hideUserNotFoundExceptions" value="false" />
+		<property name="userDetailsService" ref="defaultUserDetailsService" />
+		<property name="passwordEncoder" ref="passwordEncoder" />
+		<property name="saltSource" ref="saltSource" />
+	</bean>
+
+	<!-- 用户的密码加密或解密 -->
+	<bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.Md5PasswordEncoder"/>
+	
+	<!-- 盐值 -->
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.SystemWideSaltSource">
+		<property name="systemWideSalt" value="id" />
+	</bean>
+</beans>

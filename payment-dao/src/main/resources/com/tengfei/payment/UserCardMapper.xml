@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.UserCardDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="userMap" type="com.tengfei.payment.vo.UserCard">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="bank.id" column="bank"/>
+        <result property="bank.picPath" column="pic_path"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="country"/>
+        <result property="banckName" column="bank_name"/>
+        <result property="cardName" column="card_user_name"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+    <select id="listUserCard" resultMap="userMap">
+      SELECT
+			uc.*, c.pic_path
+		FROM
+			user_card uc
+		LEFT JOIN card c ON uc.bank = c.id
+      <where>
+      	<if test="null != mapBean">
+	    	<if test="null != mapBean.userId and '' != mapBean.userId">
+	    		and uc.user_id = #{mapBean.userId}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+    <select id="getUserCardCount" resultType="map">
+    	SELECT
+			count(1) as count
+		FROM
+			user_card where user_id = #{userId}
+    </select>
+    
+    <insert id="insertUserCard">
+    	insert into user_card(id, user_id, bank, province, city, county, 
+    		bank_name, card_user_name, card_no, create_date, update_date)
+		values(#{id}, #{userId}, #{bank.id}, #{province}, #{city}, #{county}, #{banckName}
+		, #{cardName}, #{cardNo}, #{createDate}, #{updateDate})
+    </insert>
+    
+    <delete id="delUserCard">
+    	delete from user_card where id = #{id}
+    </delete>
+        
+</mapper>

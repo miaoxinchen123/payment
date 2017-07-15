@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tengfei.payment.dao.withDrawDao">
+   <!-- 自定义返回结果集 -->
+   <resultMap id="withDrawMap" type="com.tengfei.payment.vo.WithDraw">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="money" column="money"/>
+        <result property="cardId" column="card_id"/>
+        <result property="status" column="status"/>
+         <result property="cardNo" column="card_no"/>
+        <result property="platformCharge" column="platform_charge"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+      <resultMap id="withDrawDtoMap" type="com.tengfei.payment.dto.WithDrawDto">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userAccount" column="count"/>
+        <result property="money" column="money"/>
+        <result property="cardId" column="card_id"/>
+        <result property="status" column="status"/>
+        <result property="cardNo" column="card_no"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="county" column="county"/>
+        <result property="platformCharge" column="platform_charge"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+    
+     <sql id="ex_pwd_cols">
+    	w.id, w.user_id,  w.money, w.card_id, w.status, w.platform_charge, w.create_date, w.update_date
+    </sql>
+    
+	<insert id="addWithDraw">
+		insert into withdraw (id,user_id,money,status,card_id,platform_charge,create_date,update_date)
+			values(#{id},#{userId},#{money},#{status},#{cardId},#{platformCharge},#{createDate},#{updateDate})
+	</insert>
+	
+  	<sql id="update_conditions">
+   		<trim prefix="set" suffixOverrides=",">
+	       	<if test="null != status">status=#{status},</if>
+	       	<if test="null != updateDate">update_date=#{updateDate},</if>
+       </trim>
+    </sql>
+	
+	<update id="updateWithDraw">
+		update withdraw
+		 <include refid="update_conditions"/>
+		where id = #{id}
+	</update>
+	
+	<select id="getWithDraw" resultMap="withDrawMap" >
+		select * from  withdraw
+		where id = #{id}
+	</select>
+	
+    <select id="pageQueryWithDraw" resultMap="withDrawMap">
+   	  select c.card_no,<include refid="ex_pwd_cols"/>  from user_card c,withdraw w 
+      <where>
+      	<if test="null != mapBean">
+       			and c.id = w.card_id
+	    	<if test="null != mapBean.userId and '' != mapBean.userId">
+	    		and w.user_id =#{mapBean.userId}
+	    	</if>
+	    	<if test="null != mapBean.withDrawStatus and '' != mapBean.withDrawStatus">
+	    		and w.status = #{mapBean.withDrawStatus}
+	    	</if>
+	    </if>
+      </where>
+    </select>
+    
+     <select id="adminPageQueryWithDraw" resultMap="withDrawDtoMap">
+   	  select c.card_no,u.count,c.bank_name,aa.name as province,ab.name as city,ac.name as county,<include refid="ex_pwd_cols"/>  from user u,user_card c,withdraw w,area aa,area ab,area ac
+      		where c.id = w.card_id and c.province = aa.id and c.city = ab.id and c.county = ac.id and u.id = c.user_id
+	    	<if test="null != mapBean">
+		    	<if test="null != mapBean.count and '' != mapBean.count">
+		    		and u.count =#{mapBean.count}
+		    	</if>
+		    	<if test="null != mapBean.status and '' != mapBean.status">
+		    		and w.status = #{mapBean.status}
+		    	</if>
+		    </if>
+    </select>
+    
+</mapper>
