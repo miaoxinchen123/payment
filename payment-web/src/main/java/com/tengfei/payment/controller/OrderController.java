@@ -135,7 +135,7 @@ public class OrderController {
 			float platformCharge = 0;
 			if (userRate == null) {
 				// 默认千分之5
-				platformChargeFloat = 5l;
+				platformChargeFloat = 0.005f;
 			} else {
 				if (bussiness_channel.equals(TradeType.ALIPAYPC.code())) {
 					platformChargeFloat = userRate.getAlipayPc();
@@ -156,6 +156,10 @@ public class OrderController {
 			order.setBusinessChannel(bussiness_channel);
 			platformCharge = new BigDecimal(platformChargeFloat).multiply(new BigDecimal(bussiness_money))
 					.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+			//最低收费1分钱
+			if(platformCharge < 0.01) {
+				platformCharge = 0.01f;
+			}
 			order.setPlatformCharge(platformCharge);
 			order.setCreateDate(new Date());
 			if (status.equals(OrderStatus.SUCCESS.code())) {
