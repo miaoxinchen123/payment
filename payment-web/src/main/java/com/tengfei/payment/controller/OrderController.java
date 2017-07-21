@@ -32,7 +32,7 @@ import com.tengfei.payment.vo.User;
 import com.tengfei.payment.vo.UserRate;
 
 /**
- *  订单管理
+ * 订单管理
  * 
  * @author miaoxin.chen
  * @date 2016年8月30日
