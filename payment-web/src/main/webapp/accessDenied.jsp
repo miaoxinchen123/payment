@@ -1,7 +1,5 @@
 <%@page language="java" import="java.util.*" pageEncoding="utf-8"%>
-
 <!DOCTYPE html>
-
 <html>
 <head>
 <title>访问拒绝</title>
